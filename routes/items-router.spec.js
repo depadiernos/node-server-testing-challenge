@@ -1,4 +1,4 @@
-const db = require("./data/db-config")
+const db = require("../data/db-config")
 const server = require("../index")
 
 beforeEach(async () => {
@@ -6,26 +6,44 @@ beforeEach(async () => {
 })
 
 describe("items router", () => {
-  test("get list of items", async () => {
+  test("get list of items return 200 and json object", async () => {
     const res = await request(server).get("/items")
     expect(res.status).toBe(200)
     expect(res.type).toBe("application/json")
+  })
+
+  test("get list of items return 3 items", async () => {
+    const res = await request(server).get("/items")
     expect(res.body.length).toBe(3)
   })
 
-  test("add item to list", async () => {
+  test("add item to list returns 201 and json object", async () => {
     const res = await request(server)
       .post("/items")
       .send({ name: "Book" })
     expect(res.status).toBe(201)
     expect(res.type).toBe("application/json")
+  })
+
+  test("add item to list returns 'Book'", async () => {
+    const res = await request(server)
+      .post("/items")
+      .send({ name: "Book" })
     expect(res.body.name).toBe("Book")
   })
 
-  test("delete item to list", async () => {
+  test("delete item from list", async () => {
     const res = await request(server)
       .delete("/items")
       .send({ id: 1 })
     expect(res.status).toBe(204)
+  })
+
+  test("delete item from list", async () => {
+    const res = await request(server)
+      .delete("/items")
+      .send({ id: 1 })
+    const items = db("items").length
+    expect(items.length).toBe(2)
   })
 })
