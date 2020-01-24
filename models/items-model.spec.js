@@ -19,9 +19,9 @@ describe("items model", () => {
     expect(res.name).toBe("Book")
   })
   test("remove", async () => {
-    const before = await itemsModel.list()
+    const before = await itemsModel.find()
     await itemsModel.remove(1)
-    const after = await itemsModel.list()
-    expect(after.length).toBe(before.length)
+    const after = await itemsModel.find()
+    expect(after.length).toBe(before.length - 1)
   })
 })
