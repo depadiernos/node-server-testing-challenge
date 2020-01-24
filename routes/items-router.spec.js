@@ -1,3 +1,4 @@
+const request = require("supertest")
 const db = require("../data/db-config")
 const server = require("../index")
 
@@ -33,17 +34,13 @@ describe("items router", () => {
   })
 
   test("delete item from list", async () => {
-    const res = await request(server)
-      .delete("/items")
-      .send({ id: 1 })
+    const res = await request(server).delete("/items/1")
     expect(res.status).toBe(204)
   })
 
   test("delete item from list", async () => {
-    const res = await request(server)
-      .delete("/items")
-      .send({ id: 1 })
-    const items = db("items").length
+    const res = await request(server).delete("/items/1")
+    const items = await db("items")
     expect(items.length).toBe(2)
   })
 })
